@@ -12,15 +12,7 @@ class List extends React.Component {
 
     this.state = {
       users: [],
-      month: false
-    }
-  }
-
-  changeTop() {
-    if (this.state.month) {
-      this.getOverallTop();
-    } else {
-      this.getTopLast30Days();
+      recent: false
     }
   }
 
@@ -29,54 +21,27 @@ class List extends React.Component {
   }
 
   /**
-   * Get json from url
-   * @param url
-   * @param success
-   * @param error
+   * Get top 100 users from last 30 days
    */
-  getJSON(url, success, error) {
-    var request = new XMLHttpRequest();
-    request.open('GET', url, true);
-
-    request.onload = function() {
-      if (this.status >= 200 && this.status < 400) {
-
-        var data = JSON.parse(this.response);
-        if (typeof success === 'function') {
-          success(data);
-        }
-      } else {
-        if (typeof error === 'function') {
-          error()
-        }
-      }
-    };
-
-    request.onerror = function() {
-      if (typeof error === 'function') {
-        error()
-      }
-    };
-
-    request.send();
-  }
-
   getTopLast30Days() {
     let url = 'http://fcctop100.herokuapp.com/api/fccusers/top/recent';
-    this.getJSON(url, function (data) {
+    $.get(url, function (data) {
       this.setState({
         users: data,
-        month: true
+        recent: true
       });
     }.bind(this));
   }
 
+  /**
+   * Get top 100 users from overall top
+   */
   getOverallTop() {
     let url = 'http://fcctop100.herokuapp.com/api/fccusers/top/alltime';
-    this.getJSON(url, function (data) {
+    $.get(url, function (data) {
       this.setState({
         users: data,
-        month: false
+        recent: false
       });
     }.bind(this));
   }
@@ -89,12 +54,23 @@ class List extends React.Component {
     });
 
     return (
-      <div className="list">
-        <header>
-          <button onClick={this.changeTop.bind(this)}>Cahnge top</button>
-        </header>
-        {users}
-      </div>
+      <table className="list table table-responsive">
+        <thead>
+          <tr>
+            <th>
+            </th>
+            <th className="col-xs-1 text-center">
+              <button className="btn btn-default btn-sm" onClick={this.getTopLast30Days.bind(this)}>Recent {this.state.recent ? <i className="glyphicon glyphicon-circle-arrow-down"></i> : '' }</button>
+            </th>
+            <th className="col-xs-1 text-center">
+              <button className="btn btn-default btn-sm" onClick={this.getOverallTop.bind(this)}>Overall {!this.state.recent ? <i className="glyphicon glyphicon-circle-arrow-down"></i> : '' }</button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {users}
+        </tbody>
+      </table>
     )
   }
 }

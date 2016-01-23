@@ -7,14 +7,13 @@ import LazyLoad from 'react-lazy-load';
 class User extends React.Component {
   render() {
     return (
-      <div>
-        <div>
-          <LazyLoad><img src={this.props.data.img} width="30" /></LazyLoad>
-        </div>
-        <div>{this.props.data.username}</div>
-        <div>{this.props.data.recent}</div>
-        <div>{this.props.data.alltime}</div>
-      </div>
+      <tr>
+        <td>
+          <LazyLoad height={30} width={40}><img src={this.props.data.img} width="30" className="img-circle"/></LazyLoad> <span className="username">{this.props.data.username}</span>
+        </td>
+        <td className="col-xs-1 text-center">{this.props.data.recent}</td>
+        <td className="col-xs-1 text-center">{this.props.data.alltime}</td>
+      </tr>
     )
   }
 }

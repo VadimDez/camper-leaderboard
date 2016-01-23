@@ -1,0 +1,16 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+.list {
+  .LazyLoad {
+    float: left;
+    padding-right: 20px;
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+  .username {
+    margin-top: 5px;
+  }
+}
